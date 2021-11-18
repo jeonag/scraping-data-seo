@@ -121,7 +121,7 @@ class ScrapingUrl:
     def imgenes(self, soup):
         try:
             images = [[a["src"], a["alt"]] if "alt" in str(a) else [a["src"], ""] for a in soup.find_all('img')]
-            return images
+            return len(images)
         except:
             images = 0
             return images
