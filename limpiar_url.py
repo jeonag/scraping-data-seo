@@ -14,7 +14,7 @@ def limpiarDatos(nombreHoja):
     # Eliminar registros que coincidan con string de la lista
     buscarStrings = ['facebook', 'netflix', 'mercadolibre', 'olx', 'walmart', 'amazon', 'instagram', '.pdf', 'scribd',
                      'netflix', 'milanuncios', 'ebay', 'twitter', 'fiscalia', 'linkedin', 'prezi', 'pinteres',
-                     'wikipedia', 'eluniverso', 'elcomercio', 'artefacta']
+                     'wikipedia', 'eluniverso', 'elcomercio', 'artefacta', 'html', 'php', '.ksp', 'lahora']
     pattern = '|'.join(buscarStrings)
     var = df[~df[nombreHoja].str.contains(pattern)]
     print(var)

@@ -11,6 +11,14 @@ class ScrapingUrl:
             metatitle = 0
             return metatitle
 
+    def len_metatitulo(self, soup):
+        try:
+            metatitle = (soup.find('title')).get_text()
+            return len(metatitle)
+        except:
+            metatitle = 0
+            return metatitle
+
     def metadescripcion(self, soup):
         try:
             metadescription = soup.find('meta', attrs={'name': 'description'})["content"]
@@ -19,8 +27,13 @@ class ScrapingUrl:
             metadescription = 0
             return metadescription
 
-    # h3 = soup.find_all('h3')  # It would return the content between the H1 tags.
-    # print("ETIQUETA H3", h3)
+    def lenMetadescripcion(self, soup):
+        try:
+            metadescription = soup.find('meta', attrs={'name': 'description'})["content"]
+            return len(metadescription)
+        except:
+            metadescription = 0
+            return metadescription
 
     def robotsDirectivas(self, soup):
         try:
@@ -64,6 +77,72 @@ class ScrapingUrl:
         except:
             text_length = 0
             return text_length
+
+    def lenHeadingUno(self, soup):
+        try:
+            h1 = [a.get_text() for a in soup.find_all('h1')]
+            # headers = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+            # # Cleaning the headers list to get the tag and the text as different elements in a list
+            # list_headers = [[str(x)[1:3], x.get_text()] for x in headers]
+            return len(h1)
+        except:
+            h1 = 0
+            return h1
+
+    def lenHeadingDos(self, soup):
+        try:
+            h1 = [a.get_text() for a in soup.find_all('h2')]
+            # headers = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+            # # Cleaning the headers list to get the tag and the text as different elements in a list
+            # list_headers = [[str(x)[1:3], x.get_text()] for x in headers]
+            return len(h1)
+        except:
+            h1 = 0
+            return h1
+
+    def lenHeadingTres(self, soup):
+        try:
+            h1 = [a.get_text() for a in soup.find_all('h3')]
+            # headers = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+            # # Cleaning the headers list to get the tag and the text as different elements in a list
+            # list_headers = [[str(x)[1:3], x.get_text()] for x in headers]
+            return len(h1)
+        except:
+            h1 = 0
+            return h1
+
+    def lenHeadingCuatro(self, soup):
+        try:
+            h1 = [a.get_text() for a in soup.find_all('h4')]
+            # headers = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+            # # Cleaning the headers list to get the tag and the text as different elements in a list
+            # list_headers = [[str(x)[1:3], x.get_text()] for x in headers]
+            return len(h1)
+        except:
+            h1 = 0
+            return h1
+
+    def lenHeadingCinco(self, soup):
+        try:
+            h1 = [a.get_text() for a in soup.find_all('h5')]
+            # headers = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+            # # Cleaning the headers list to get the tag and the text as different elements in a list
+            # list_headers = [[str(x)[1:3], x.get_text()] for x in headers]
+            return len(h1)
+        except:
+            h1 = 0
+            return h1
+
+    def lenHeadingSies(self, soup):
+        try:
+            h1 = [a.get_text() for a in soup.find_all('h6')]
+            # headers = soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+            # # Cleaning the headers list to get the tag and the text as different elements in a list
+            # list_headers = [[str(x)[1:3], x.get_text()] for x in headers]
+            return len(h1)
+        except:
+            h1 = 0
+            return h1
 
     def linksInternos(self, soup):
         try:
@@ -129,7 +208,7 @@ class ScrapingUrl:
     def wordCount(self, soup):
         try:
             wordCount = soup.find('body').get_text().split()
-            return wordCount
+            return len(wordCount)
         except:
             wordCount = 0
             return wordCount

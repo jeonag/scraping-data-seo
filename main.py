@@ -6,6 +6,9 @@ import pandas as pd
 
 scrapingUrl = ScrapingUrl()
 
+
+# url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
+
 def soupUrl(url):
     scraper = cloudscraper.create_scraper()
 
@@ -15,9 +18,8 @@ def soupUrl(url):
     proxies = {
         'http': 'http://10.10.1.10:3128'
     }
-    # url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
     try:
-        page = scraper.get(url, headers=headers, proxies=proxies, timeout=2)
+        page = scraper.get(url, headers=headers, timeout=4)
         print(page.ok)
         soup = BeautifulSoup(page.text, 'html.parser')
         return soup
@@ -26,7 +28,6 @@ def soupUrl(url):
         soup = 0
         print(e)
         return soup
-
 
 
 def concatenar_lista(lista, caracter):
@@ -57,6 +58,7 @@ def agruparParametros(url, soup):
     # Parametros SEO
     metatitulo = scrapingUrl.metatitulo(soup)
     metadescription = scrapingUrl.metadescripcion(soup)
+    len_metadescription = scrapingUrl.lenMetadescripcion(soup)
     robots_directivas = scrapingUrl.robotsDirectivas(soup)
     puerto = scrapingUrl.puerto(soup)
     lenguaje = scrapingUrl.lenguaje(soup)
@@ -64,35 +66,52 @@ def agruparParametros(url, soup):
     text_length = scrapingUrl.lenParrafo(soup)
     links_internos = scrapingUrl.linksInternos(soup)
     links_externos = scrapingUrl.linksExternos(soup)
-    etiquetas = scrapingUrl.etiquetaEncabezado(soup)
     lenImagenes = scrapingUrl.imgenes(soup)
     size_pagina = scrapingUrl.sizePaginaWeb(url)
     text_radio = textoRadio(soup)
     wordCount = scrapingUrl.wordCount(soup)
+    etiquetas = scrapingUrl.etiquetaEncabezado(soup)
+    len_h_uno = scrapingUrl.lenHeadingUno(soup)
+    len_h_dos = scrapingUrl.lenHeadingDos(soup)
+    len_h_tres = scrapingUrl.lenHeadingTres(soup)
+    len_h_cuatro = scrapingUrl.lenHeadingCuatro(soup)
+    len_h_cinco = scrapingUrl.lenHeadingCinco(soup)
+    len_h_seis = scrapingUrl.lenHeadingSies(soup)
+    len_metatitulo = scrapingUrl.len_metatitulo(soup)
 
-    print(metatitulo)
-
-    # data = {'metatitulo': metatitulo,
-    #         'wourd count': wordCount,
-    #         # 'metadescription': metadescription,
-    #         # # 'robots_directivas': robots_directivas,
-    #         # 'puerto': puerto,
-    #         # 'lenguaje': lenguaje,
-    #         # 'canonical': canonical,
-    #         # 'text_length': text_length,
-    #         # 'links_internos': links_internos,
-    #         # 'links_externos': links_externos,
-    #         # # 'etiquetas': etiquetas,
-    #         # 'size_pagina': size_pagina,
-    #         # 'lenImagenes': lenImagenes,
-    #         # 'text_radio': text_radio,
-    #         'Categoria': ''}
-    # df = pd.DataFrame(data=data, index=[0])
+    data = {
+        # 'metadescription': metadescription,
+        # # 'robots_directivas': robots_directivas,
+        # 'lenguaje': lenguaje,
+        # 'canonical': canonical,
+        # # 'etiquetas': etiquetas,
+        'url': url,
+        'url_len': len(url),
+        'wourd count': wordCount,
+        'puerto': puerto,
+        'text_length': text_length,
+        'links_internos': links_internos,
+        'links_externos': links_externos,
+        'size_pagina': size_pagina,
+        'lenImagenes': lenImagenes,
+        'text_radio': text_radio,
+        'len_h_uno': len_h_uno,
+        'len_h_dos': len_h_dos,
+        'len_h_tres': len_h_tres,
+        'len_h_cuatro': len_h_cuatro,
+        'len_h_cinco': len_h_cinco,
+        'len_h_seis': len_h_seis,
+        'len_metadescription': len_metadescription,
+        'len_metatitulo': len_metatitulo,
+        'Categoria': '1'}
+    df = pd.DataFrame(data=data, index=[0])
     # print(df)
+    # print(data)
+    return df
 
 
 def leerExcel(nombreHoja):
-    direccion = 'url-seo.xlsx'
+    direccion = 'url_data_clean.xlsx'
     # Crea un dataframe del excel
     data_seo = pd.read_excel(direccion, sheet_name=nombreHoja)
 
@@ -107,41 +126,47 @@ def obtenerParametrosUrls():
     # dfseoBajo = limpiarDatos(nombreHoja)
     nombreHoja = 'SEO_ALTO'
     dfseoAlto = leerExcel(nombreHoja)
-
+    data = {}
+    df = pd.DataFrame(data=data, index=[0])
     for iter in dfseoAlto.index:
         # url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
         url = dfseoAlto['SEO_ALTO'][iter]
         print(url)
         soup = soupUrl(url)
-        agruparParametros(url, soup)
+        data = {
+        # 'metadescription': metadescription,
+        # # 'robots_directivas': robots_directivas,
+        # 'lenguaje': lenguaje,
+        # 'canonical': canonical,
+        # # 'etiquetas': etiquetas,
+        'url': 0,
+        'url_len': 0,
+        'wourd count': 0,
+        'puerto': 0,
+        'text_length': 0,
+        'links_internos': 0,
+        'links_externos': 0,
+        'size_pagina': 0,
+        'lenImagenes': 0,
+        'text_radio': 0,
+        'len_h_uno': 0,
+        'len_h_dos': 0,
+        'len_h_tres': 0,
+        'len_h_cuatro': 0,
+        'len_h_cinco': 0,
+        'len_h_seis': 0,
+        'len_metadescription': 0,
+        'len_metatitulo': 0,
+        'Categoria': '1'}
+        df = pd.DataFrame(data=data, index=[0])
+        df2 = agruparParametros(url, soup)
+        df.append(df2)
+        print(df)
+    return df
 
 
-obtenerParametrosUrls()
-
-# url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
-# soup = soupUrl(url)
-# etiquetas = scrapingUrl.etiquetaEncabezado(soup)
-# print(etiquetas)
-# robots_directivas = scrapingUrl.robotsDirectivas(soup)
-# print(robots_directivas)
-
-
-
-
-# import cloudscraper
-# from bs4 import BeautifulSoup
-#
-# scraper = cloudscraper.create_scraper()
-#
-# url = "https://ec.eldirectorio.co/empresas/galapagos/laptops"
-# html = scraper.get(url=url)
-# soup = BeautifulSoup(html.text)
-# wordCount = scrapingUrl.wordCount(soup)
-#
-# result = soup.find_all('a')
-# a = list()
-# for g in result:
-#     for i in g.get_text().split():
-#         a.append(i)
-# wordCount = len(wordCount) + len(a)
-# print(wordCount)
+data = obtenerParametrosUrls()
+print(data)
+# dfseoAlto = pd.DataFrame(data=data, index=[0])
+with pd.ExcelWriter('matriz_seo_alto.xlsx') as writer:
+    data.to_excel(writer, sheet_name='SEO_ALTO')
