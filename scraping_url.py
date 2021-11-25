@@ -126,6 +126,14 @@ class ScrapingUrl:
             images = 0
             return images
 
+    def wordCount(self, soup):
+        try:
+            wordCount = soup.find('body').get_text().split()
+            return wordCount
+        except:
+            wordCount = 0
+            return wordCount
+
     # def concatenar_lista(self, lista, caracter):
     #     if isinstance(lista, list):
     #         if isinstance(caracter, str):

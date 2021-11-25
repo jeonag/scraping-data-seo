@@ -1,12 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 from scraping_url import ScrapingUrl
+import cloudscraper
 import pandas as pd
 
 scrapingUrl = ScrapingUrl()
 
-
 def soupUrl(url):
+    scraper = cloudscraper.create_scraper()
+
     headers = {
         'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
     }
@@ -14,9 +16,17 @@ def soupUrl(url):
         'http': 'http://10.10.1.10:3128'
     }
     # url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
-    page = requests.get(url, headers=headers, proxies=proxies)
-    soup = BeautifulSoup(page.text, 'html.parser')
-    return soup
+    try:
+        page = scraper.get(url, headers=headers, proxies=proxies, timeout=2)
+        print(page.ok)
+        soup = BeautifulSoup(page.text, 'html.parser')
+        return soup
+    except requests.exceptions.Timeout as e:
+        # Maybe set up for a retry
+        soup = 0
+        print(e)
+        return soup
+
 
 
 def concatenar_lista(lista, caracter):
@@ -58,23 +68,27 @@ def agruparParametros(url, soup):
     lenImagenes = scrapingUrl.imgenes(soup)
     size_pagina = scrapingUrl.sizePaginaWeb(url)
     text_radio = textoRadio(soup)
+    wordCount = scrapingUrl.wordCount(soup)
 
-    data = {'metatitulo': metatitulo,
-            'metadescription': metadescription,
-            # 'robots_directivas': robots_directivas,
-            'puerto': puerto,
-            'lenguaje': lenguaje,
-            'canonical': canonical,
-            'text_length': text_length,
-            'links_internos': links_internos,
-            'links_externos': links_externos,
-            # 'etiquetas': etiquetas,
-            'size_pagina': size_pagina,
-            'lenImagenes': lenImagenes,
-            'text_radio': text_radio,
-            'Categoria': ''}
-    df = pd.DataFrame(data=data, index=[0])
-    print(df)
+    print(metatitulo)
+
+    # data = {'metatitulo': metatitulo,
+    #         'wourd count': wordCount,
+    #         # 'metadescription': metadescription,
+    #         # # 'robots_directivas': robots_directivas,
+    #         # 'puerto': puerto,
+    #         # 'lenguaje': lenguaje,
+    #         # 'canonical': canonical,
+    #         # 'text_length': text_length,
+    #         # 'links_internos': links_internos,
+    #         # 'links_externos': links_externos,
+    #         # # 'etiquetas': etiquetas,
+    #         # 'size_pagina': size_pagina,
+    #         # 'lenImagenes': lenImagenes,
+    #         # 'text_radio': text_radio,
+    #         'Categoria': ''}
+    # df = pd.DataFrame(data=data, index=[0])
+    # print(df)
 
 
 def leerExcel(nombreHoja):
@@ -102,13 +116,32 @@ def obtenerParametrosUrls():
         agruparParametros(url, soup)
 
 
-# obtenerParametrosUrls()
+obtenerParametrosUrls()
 
-url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
+# url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
+# soup = soupUrl(url)
+# etiquetas = scrapingUrl.etiquetaEncabezado(soup)
+# print(etiquetas)
+# robots_directivas = scrapingUrl.robotsDirectivas(soup)
+# print(robots_directivas)
 
-print(url)
-soup = soupUrl(url)
-etiquetas = scrapingUrl.etiquetaEncabezado(soup)
-print(etiquetas)
-robots_directivas = scrapingUrl.robotsDirectivas(soup)
-print(robots_directivas)
+
+
+
+# import cloudscraper
+# from bs4 import BeautifulSoup
+#
+# scraper = cloudscraper.create_scraper()
+#
+# url = "https://ec.eldirectorio.co/empresas/galapagos/laptops"
+# html = scraper.get(url=url)
+# soup = BeautifulSoup(html.text)
+# wordCount = scrapingUrl.wordCount(soup)
+#
+# result = soup.find_all('a')
+# a = list()
+# for g in result:
+#     for i in g.get_text().split():
+#         a.append(i)
+# wordCount = len(wordCount) + len(a)
+# print(wordCount)
