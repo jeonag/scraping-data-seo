@@ -15,7 +15,11 @@ def limpiarDatos(nombreHoja):
     buscarStrings = ['facebook', 'netflix', 'mercadolibre', 'olx', 'walmart', 'amazon', 'instagram', '.pdf', 'scribd',
                      'netflix', 'milanuncios', 'ebay', 'twitter', 'fiscalia', 'linkedin', 'prezi', 'pinteres',
                      'wikipedia', 'eluniverso', 'elcomercio', 'artefacta', 'html', 'php', '.ksp', 'lahora', 'news',
-                     'docx']
+                     'docx', 'hotel', 'books', 'areasprotegidas', 'bestbuy', 'rtu', 'trabajo', '.gob', 'vymaps',
+                     'municipiodeatacames', 'elcomercio', 'ubica.ec', 'clasificados', 'los40', '.edu', 'vistazo',
+                     'iess', 'defensacivil', 'milanuncios', 'paginas-amarillas', 'infoanuncios', 'netlife', '.doplim',
+                     'catalogo.claro', 'elpais', 'gallivantations', 'avianca', 'microsoft',
+                     'books.google', 'bbc', 'corporativo.tia', 'chrome', 'tetris', 'horarios']
     pattern = '|'.join(buscarStrings)
     var = df[~df[nombreHoja].str.contains(pattern)]
     print(var)
