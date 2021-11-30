@@ -19,7 +19,7 @@ def soupUrl(url):
         'http': 'http://10.10.1.10:3128'
     }
     try:
-        page = scraper.get(url, headers=headers, timeout=4)
+        page = scraper.get(url, headers=headers, timeout=10)
         print(page.ok)
         soup = BeautifulSoup(page.text, 'html.parser')
         return soup
@@ -107,7 +107,27 @@ def agruparParametros(url, soup):
     df = pd.DataFrame(data=data, index=[0])
     # print(df)
     # print(data)
-    return df
+    # return data.items()
+    ldata = [url,
+             len(url),
+             wordCount,
+             puerto,
+             text_length,
+             links_internos,
+             links_externos,
+             size_pagina,
+             lenImagenes,
+             text_radio,
+             len_h_uno,
+             len_h_dos,
+             len_h_tres,
+             len_h_cuatro,
+             len_h_cinco,
+             len_h_seis,
+             len_metadescription,
+             len_metatitulo,
+             '1']
+    return ldata
 
 
 def leerExcel(nombreHoja):
@@ -122,51 +142,27 @@ def leerExcel(nombreHoja):
 
 
 def obtenerParametrosUrls():
-    # nombreHoja = 'SEO_BAJO'
-    # dfseoBajo = limpiarDatos(nombreHoja)
-    nombreHoja = 'SEO_ALTO'
+    nombreHoja = 'SEO_BAJO'
+    # dfseoBajo = leerExcel(nombreHoja)
+    # nombreHoja = 'SEO_ALTO'
     dfseoAlto = leerExcel(nombreHoja)
-    data = {}
-    df = pd.DataFrame(data=data, index=[0])
+    ldata = []
+    # df = pd.DataFrame(data=data, index=[0])
     for iter in dfseoAlto.index:
-        # url = "https://www.yataco.com.pe/cargador-laptop/ciu.php?ciu=ec-zam&key=Cargador-de-Laptop-Zamora"
-        url = dfseoAlto['SEO_ALTO'][iter]
+        url = dfseoAlto['SEO_BAJO'][iter]
         print(url)
         soup = soupUrl(url)
-        data = {
-        # 'metadescription': metadescription,
-        # # 'robots_directivas': robots_directivas,
-        # 'lenguaje': lenguaje,
-        # 'canonical': canonical,
-        # # 'etiquetas': etiquetas,
-        'url': 0,
-        'url_len': 0,
-        'wourd count': 0,
-        'puerto': 0,
-        'text_length': 0,
-        'links_internos': 0,
-        'links_externos': 0,
-        'size_pagina': 0,
-        'lenImagenes': 0,
-        'text_radio': 0,
-        'len_h_uno': 0,
-        'len_h_dos': 0,
-        'len_h_tres': 0,
-        'len_h_cuatro': 0,
-        'len_h_cinco': 0,
-        'len_h_seis': 0,
-        'len_metadescription': 0,
-        'len_metatitulo': 0,
-        'Categoria': '1'}
-        df = pd.DataFrame(data=data, index=[0])
         df2 = agruparParametros(url, soup)
-        df.append(df2)
-        print(df)
-    return df
+        ldata.append(df2)
+        # print(ldata)
+    return ldata
 
 
 data = obtenerParametrosUrls()
 print(data)
-# dfseoAlto = pd.DataFrame(data=data, index=[0])
-with pd.ExcelWriter('matriz_seo_alto.xlsx') as writer:
-    data.to_excel(writer, sheet_name='SEO_ALTO')
+columnas = ['url', 'url_len', 'wourd count', 'puerto', 'text_length', 'links_internos', 'links_externos', 'size_pagina',
+            'lenImagenes', 'text_radio', 'len_h_uno', 'len_h_dos', 'len_h_tres', 'len_h_cuatro', 'len_h_cinco',
+            'len_h_seis', 'len_metadescription', 'len_metatitulo', 'Categoria']
+dfseoAlto = pd.DataFrame(data=data, columns=columnas)
+with pd.ExcelWriter('matriz_seo_bajo_4.xlsx') as writer:
+    dfseoAlto.to_excel(writer, sheet_name='SEO_BAJO')
