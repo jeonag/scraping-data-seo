@@ -21,6 +21,8 @@ def soupUrl(url):
     try:
         page = scraper.get(url, headers=headers, timeout=10)
         print(page.ok)
+        if not page.ok:
+            return
         soup = BeautifulSoup(page.text, 'html.parser')
         return soup
     except requests.exceptions.Timeout as e:
@@ -79,35 +81,6 @@ def agruparParametros(url, soup):
     len_h_seis = scrapingUrl.lenHeadingSies(soup)
     len_metatitulo = scrapingUrl.len_metatitulo(soup)
 
-    data = {
-        # 'metadescription': metadescription,
-        # # 'robots_directivas': robots_directivas,
-        # 'lenguaje': lenguaje,
-        # 'canonical': canonical,
-        # # 'etiquetas': etiquetas,
-        'url': url,
-        'url_len': len(url),
-        'wourd count': wordCount,
-        'puerto': puerto,
-        'text_length': text_length,
-        'links_internos': links_internos,
-        'links_externos': links_externos,
-        'size_pagina': size_pagina,
-        'lenImagenes': lenImagenes,
-        'text_radio': text_radio,
-        'len_h_uno': len_h_uno,
-        'len_h_dos': len_h_dos,
-        'len_h_tres': len_h_tres,
-        'len_h_cuatro': len_h_cuatro,
-        'len_h_cinco': len_h_cinco,
-        'len_h_seis': len_h_seis,
-        'len_metadescription': len_metadescription,
-        'len_metatitulo': len_metatitulo,
-        'Categoria': '1'}
-    df = pd.DataFrame(data=data, index=[0])
-    # print(df)
-    # print(data)
-    # return data.items()
     ldata = [url,
              len(url),
              wordCount,
@@ -126,12 +99,13 @@ def agruparParametros(url, soup):
              len_h_seis,
              len_metadescription,
              len_metatitulo,
+             robots_directivas,
              '1']
     return ldata
 
 
 def leerExcel(nombreHoja):
-    direccion = 'url_data_clean.xlsx'
+    direccion = 'serp_clean.xlsx'
     # Crea un dataframe del excel
     data_seo = pd.read_excel(direccion, sheet_name=nombreHoja)
 
@@ -142,16 +116,18 @@ def leerExcel(nombreHoja):
 
 
 def obtenerParametrosUrls():
-    nombreHoja = 'SEO_BAJO'
+    # nombreHoja = 'SEO_BAJO'
     # dfseoBajo = leerExcel(nombreHoja)
-    # nombreHoja = 'SEO_ALTO'
+    nombreHoja = 'SEO_ALTO'
     dfseoAlto = leerExcel(nombreHoja)
     ldata = []
-    # df = pd.DataFrame(data=data, index=[0])
     for iter in dfseoAlto.index:
-        url = dfseoAlto['SEO_BAJO'][iter]
+        # url = dfseoAlto['SEO_BAJO'][iter]
+        url = dfseoAlto['SEO_ALTO'][iter]
         print(url)
         soup = soupUrl(url)
+        if soup is None:
+            continue
         df2 = agruparParametros(url, soup)
         ldata.append(df2)
         # print(ldata)
@@ -162,7 +138,7 @@ data = obtenerParametrosUrls()
 print(data)
 columnas = ['url', 'url_len', 'wourd count', 'puerto', 'text_length', 'links_internos', 'links_externos', 'size_pagina',
             'lenImagenes', 'text_radio', 'len_h_uno', 'len_h_dos', 'len_h_tres', 'len_h_cuatro', 'len_h_cinco',
-            'len_h_seis', 'len_metadescription', 'len_metatitulo', 'Categoria']
+            'len_h_seis', 'len_metadescription', 'len_metatitulo', 'robots_directives', 'Categoria']
 dfseoAlto = pd.DataFrame(data=data, columns=columnas)
-with pd.ExcelWriter('matriz_seo_bajo_4.xlsx') as writer:
+with pd.ExcelWriter('matriz_seo_alto.xlsx') as writer:
     dfseoAlto.to_excel(writer, sheet_name='SEO_BAJO')

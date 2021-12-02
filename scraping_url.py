@@ -36,12 +36,14 @@ class ScrapingUrl:
             return metadescription
 
     def robotsDirectivas(self, soup):
+        robots_dir = 0
         try:
             robots_directives = soup.find('meta', attrs={'name': 'robots'})["content"].split(",")
-            return robots_directives
+            if robots_directives:
+                robots_dir = 1
+            return robots_dir
         except:
-            robots_directives = 0
-            return robots_directives
+            return robots_dir
 
     def puerto(self, soup):
         try:

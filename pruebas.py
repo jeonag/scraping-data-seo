@@ -1,27 +1,33 @@
-print(len(
-    'Te explicamos cuales son las mejores marcas de laptops que existen, en donde comprarlas y porque son las más reconocidas del mercado.'))
-data = {
-        # 'metadescription': metadescription,
-        # # 'robots_directivas': robots_directivas,
-        # 'lenguaje': lenguaje,
-        # 'canonical': canonical,
-        # # 'etiquetas': etiquetas,
-        'url': 0,
-        'url_len': 0,
-        'wourd count': 0,
-        'puerto': 0,
-        'text_length': 0,
-        'links_internos': 0,
-        'links_externos': 0,
-        'size_pagina': 0,
-        'lenImagenes': 0,
-        'text_radio': 0,
-        'len_h_uno': 0,
-        'len_h_dos': 0,
-        'len_h_tres': 0,
-        'len_h_cuatro': 0,
-        'len_h_cinco': 0,
-        'len_h_seis': 0,
-        'len_metadescription': 0,
-        'len_metatitulo': 0,
-        'Categoria': '1'}
+# import cloudscraper
+# from bs4 import BeautifulSoup
+#
+# scraper = cloudscraper.create_scraper()
+# url = "https://www.officedepot.com.mx/"
+#
+# html = scraper.get(url)
+# print(html.ok)
+# #     retun;
+# soup = BeautifulSoup(html.text)
+#
+# # viewport = soup.find('meta', attrs={'name': 'viewport'})["content"]
+#
+# try:
+#     html_language = soup.find('html')["lang"]
+#     if html_language:
+#         print(html_language)
+# except:
+#     print("0")
+
+from urllib.parse import urlparse, parse_qs
+
+URL = 'https://computacion.mercadolibre.com.ec/vendo-cyber-y-venta-compus-y-laptops-en-otavalo'
+parsed_url = urlparse(URL)
+print(parse_qs(parsed_url.query))
+
+
+from newspaper import Article
+import requests
+from bs4 import BeautifulSoup
+from readability.readability import Document as Paper
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import re
