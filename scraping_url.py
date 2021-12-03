@@ -1,20 +1,24 @@
 import requests
-from urllib.request import Request,urlopen
-from time import time
+from urllib.request import Request, urlopen
+
 
 class ScrapingUrl:
 
-    def loadTime(self,url):
+    def loadTime(self, url):
+        timeTotal = 0
         try:
+            from time import time
             req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             stream = urlopen(req)
             start_time = time()
-            output = stream.read()
+            stream.read()
             end_time = time()
             stream.close()
-            return end_time-start_time
+            timeTotal = end_time - start_time
+            return timeTotal
         except:
-            return 0
+            return timeTotal
+
     def metatitulo(self, soup):
         try:
             metatitle = (soup.find('title')).get_text()
@@ -190,15 +194,6 @@ class ScrapingUrl:
         except:
             sizePage = 0
             return sizePage
-
-    def httpOrHttps(self, url):
-        try:
-            url.find('https')
-            return 1
-        except:
-
-            return 0
-
 
     def tiempoCacheNavegador(self, url):
         res = requests.head(url)

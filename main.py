@@ -60,19 +60,18 @@ def agruparParametros(url, soup):
     # Parametros SEO
     metatitulo = scrapingUrl.metatitulo(soup)
     metadescription = scrapingUrl.metadescripcion(soup)
+    lenguaje = scrapingUrl.lenguaje(soup)
+    canonical = scrapingUrl.canonical(soup)
     len_metadescription = scrapingUrl.lenMetadescripcion(soup)
     robots_directivas = scrapingUrl.robotsDirectivas(soup)
     puerto = scrapingUrl.puerto(soup)
-    lenguaje = scrapingUrl.lenguaje(soup)
-    canonical = scrapingUrl.canonical(soup)
     text_length = scrapingUrl.lenParrafo(soup)
     links_internos = scrapingUrl.linksInternos(soup)
     links_externos = scrapingUrl.linksExternos(soup)
     lenImagenes = scrapingUrl.imgenes(soup)
     size_pagina = scrapingUrl.sizePaginaWeb(url)
-    https_Https=scrapingUrl.httpOrHttps(url)
     text_radio = textoRadio(soup)
-    loadTime=scrapingUrl.loadTime(url)
+    loadTime = scrapingUrl.loadTime(url)
     wordCount = scrapingUrl.wordCount(soup)
     etiquetas = scrapingUrl.etiquetaEncabezado(soup)
     len_h_uno = scrapingUrl.lenHeadingUno(soup)
@@ -87,7 +86,6 @@ def agruparParametros(url, soup):
              len(url),
              wordCount,
              puerto,
-             https_Https,
              text_length,
              links_internos,
              links_externos,
@@ -104,7 +102,7 @@ def agruparParametros(url, soup):
              len_metadescription,
              len_metatitulo,
              robots_directivas,
-             '1']
+             '2']
     return ldata
 
 
@@ -120,14 +118,14 @@ def leerExcel(nombreHoja):
 
 
 def obtenerParametrosUrls():
-    # nombreHoja = 'SEO_BAJO'
+    nombreHoja = 'SEO_BAJO'
     # dfseoBajo = leerExcel(nombreHoja)
-    nombreHoja = 'SEO_ALTO'
+    # nombreHoja = 'SEO_ALTO'
     dfseoAlto = leerExcel(nombreHoja)
     ldata = []
     for iter in dfseoAlto.index:
-        # url = dfseoAlto['SEO_BAJO'][iter]
-        url = dfseoAlto['SEO_ALTO'][iter]
+        url = dfseoAlto['SEO_BAJO'][iter]
+        # url = dfseoAlto['SEO_ALTO'][iter]
         print(url)
         soup = soupUrl(url)
         if soup is None:
@@ -140,9 +138,9 @@ def obtenerParametrosUrls():
 
 data = obtenerParametrosUrls()
 print(data)
-columnas = ['url', 'url_len', 'wourd count', 'puerto', 'https_Https','text_length', 'links_internos', 'links_externos', 'size_pagina',
-            'lenImagenes', 'text_radio','Load Time', 'len_h_uno', 'len_h_dos', 'len_h_tres', 'len_h_cuatro', 'len_h_cinco',
-            'len_h_seis', 'len_metadescription', 'len_metatitulo', 'robots_directives', 'Categoria']
+columnas = ['url', 'url_len', 'wourd count', 'puerto', 'text_length', 'links_internos', 'links_externos', 'size_pagina',
+            'lenImagenes', 'text_radio', 'Load Time', 'len_h_uno', 'len_h_dos', 'len_h_tres', 'len_h_cuatro',
+            'len_h_cinco', 'len_h_seis', 'len_metadescription', 'len_metatitulo', 'robots_directives', 'Categoria']
 dfseoAlto = pd.DataFrame(data=data, columns=columnas)
-with pd.ExcelWriter('matriz_seo_alto.xlsx') as writer:
+with pd.ExcelWriter('matriz_seo_bajo1.xlsx') as writer:
     dfseoAlto.to_excel(writer, sheet_name='SEO_BAJO')

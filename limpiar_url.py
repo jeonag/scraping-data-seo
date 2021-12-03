@@ -18,8 +18,9 @@ def limpiarDatos(nombreHoja):
                      'docx', 'hotel', 'books', 'areasprotegidas', 'bestbuy', 'rtu', 'trabajo', '.gob', 'vymaps',
                      'municipiodeatacames', 'elcomercio', 'ubica.ec', 'clasificados', 'los40', '.edu', 'vistazo',
                      'iess', 'defensacivil', 'milanuncios', 'paginas-amarillas', 'infoanuncios', 'netlife', '.doplim',
-                      'elpais', 'gallivantations', 'avianca', 'books.google', 'bbc', 'corporativo.tia',
-                     'chrome', 'tetris', 'horarios']
+                     'elpais', 'gallivantations', 'avianca', 'books.google', 'bbc', 'corporativo.tia',
+                     'chrome', 'tetris', 'horarios', 'plusvalia', 'eldirectorio', 'puertolibreecuador', 'aliexpress',
+                     'elpalaciodehierro', 'findsun', 'clasiec', 'yahoo','buscobus']
     pattern = '|'.join(buscarStrings)
     var = df[~df[nombreHoja].str.contains(pattern)]
     return var
