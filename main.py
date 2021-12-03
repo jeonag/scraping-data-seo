@@ -70,7 +70,9 @@ def agruparParametros(url, soup):
     links_externos = scrapingUrl.linksExternos(soup)
     lenImagenes = scrapingUrl.imgenes(soup)
     size_pagina = scrapingUrl.sizePaginaWeb(url)
+    https_Https=scrapingUrl.httpOrHttps(url)
     text_radio = textoRadio(soup)
+    loadTime=scrapingUrl.loadTime(url)
     wordCount = scrapingUrl.wordCount(soup)
     etiquetas = scrapingUrl.etiquetaEncabezado(soup)
     len_h_uno = scrapingUrl.lenHeadingUno(soup)
@@ -85,12 +87,14 @@ def agruparParametros(url, soup):
              len(url),
              wordCount,
              puerto,
+             https_Https,
              text_length,
              links_internos,
              links_externos,
              size_pagina,
              lenImagenes,
              text_radio,
+             loadTime,
              len_h_uno,
              len_h_dos,
              len_h_tres,
@@ -136,8 +140,8 @@ def obtenerParametrosUrls():
 
 data = obtenerParametrosUrls()
 print(data)
-columnas = ['url', 'url_len', 'wourd count', 'puerto', 'text_length', 'links_internos', 'links_externos', 'size_pagina',
-            'lenImagenes', 'text_radio', 'len_h_uno', 'len_h_dos', 'len_h_tres', 'len_h_cuatro', 'len_h_cinco',
+columnas = ['url', 'url_len', 'wourd count', 'puerto', 'https_Https','text_length', 'links_internos', 'links_externos', 'size_pagina',
+            'lenImagenes', 'text_radio','Load Time', 'len_h_uno', 'len_h_dos', 'len_h_tres', 'len_h_cuatro', 'len_h_cinco',
             'len_h_seis', 'len_metadescription', 'len_metatitulo', 'robots_directives', 'Categoria']
 dfseoAlto = pd.DataFrame(data=data, columns=columnas)
 with pd.ExcelWriter('matriz_seo_alto.xlsx') as writer:
